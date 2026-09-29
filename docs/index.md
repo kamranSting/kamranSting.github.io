@@ -1,6 +1,6 @@
 # Blue Team Portfolio
 
-Hands-on write-ups from my home lab and study notes on the way to a **SOC analyst** role.
+Hands-on write-ups from my home lab and study notes while I work towards a SOC analyst role.
 
 <div class="grid cards" markdown>
 

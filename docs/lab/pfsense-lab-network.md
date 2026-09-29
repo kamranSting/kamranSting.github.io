@@ -8,7 +8,7 @@
 
 I wanted a lab where I could run attack tools and deliberately vulnerable machines without any of that traffic touching my home network. The lab VMs sit on a VirtualBox Internal Network behind pfSense, and their only route to the internet is through pfSense's WAN.
 
-This is an isolated lab network with a single LAN segment. It isn't split into separate subnets yet (see [Next steps](#next-steps)).
+Everything inside the lab is on one LAN subnet for now. Splitting it up is on my list (see [Next steps](#next-steps)).
 
 ## Setup
 
@@ -58,34 +58,35 @@ From Kali:
 
 ## What went wrong
 
-**Name resolution failed but the internet was reachable.** `ping google.com` returned "Temporary failure in name resolution". Pinging `8.8.8.8` directly worked with no loss, so routing through pfSense, NAT and the internet connection were all fine and the fault had to be DNS. I set a nameserver on Kali by hand:
+### DNS failed while the internet was reachable
+
+`ping google.com` returned "Temporary failure in name resolution". Pinging `8.8.8.8` directly worked with no loss, so routing through pfSense, NAT and the internet connection were all fine and the fault had to be DNS. I set a nameserver on Kali by hand:
 
 ```text
 echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
 ```
 
-After that, `ping google.com` resolved and replied in about 20 ms. This is a workaround rather than a fix, because DHCP or a reboot can overwrite `/etc/resolv.conf`. The proper fix is to make sure pfSense hands out a DNS server in its DHCP offer.
+After that, `ping google.com` resolved and replied in about 20 ms. It's only a workaround, since DHCP or a reboot can overwrite `/etc/resolv.conf`. The proper fix is to make sure pfSense hands out a DNS server in its DHCP offer.
 
-**The VM kept booting back into the installer.** The ISO was still attached and booted before the disk. I powered off, removed the ISO under Settings > Storage, and it booted the installed system. I now remove the ISO after every VM install.
+### Smaller problems
 
-**VirtualBox didn't recognise pfSense.** I set the OS type to FreeBSD (64-bit) by hand.
-
-**Kali's `.vbox` file didn't appear in Import Appliance.** That dialog only lists `.ova` and `.ovf` files. Double-clicking the `.vbox` file opened it directly.
-
-**`dhclient` isn't on this Kali image.** `sudo dhcpcd eth0` did the same job.
+- The VM kept booting back into the installer because the ISO was still attached and booted before the disk. I powered off, removed the ISO under Settings > Storage, and it booted the installed system. I now remove the ISO after every VM install.
+- VirtualBox didn't recognise pfSense, so I set the OS type to FreeBSD (64-bit) by hand.
+- Kali's `.vbox` file didn't show up in Import Appliance, which only lists `.ova` and `.ovf` files. Double-clicking the `.vbox` file opened it directly.
+- This Kali image doesn't include `dhclient`. `sudo dhcpcd eth0` did the same job.
 
 ## What I learned
 
 - To tell a DNS problem apart from a connectivity problem, ping a raw IP and then a hostname. If the IP works and the name doesn't, look at DNS before touching routing or the firewall.
-- A VirtualBox Internal Network isolates the lab from my home network, with pfSense as the only way out. That is isolation, and it is different from segmentation between lab subnets.
+- A VirtualBox Internal Network keeps the lab off my home network, with pfSense as the only way out. The machines inside can still all reach each other, so the lab is isolated but not segmented.
 - pfSense's WAN default is implicit deny: nothing comes in unless a rule allows it.
-- I watched DHCP work end to end, from the offer through the lease to the default route.
-- HTTPS on the management interface is a secure default, so I kept it.
+- I watched DHCP hand out an address and a default route, and could read each step in the `dhcpcd` output.
+- pfSense serves its web GUI over HTTPS by default, and I saw no reason to change that.
 
 ## Next steps
 
-- **Real segmentation.** Add a second Internal Network on a new pfSense interface (OPT1) for the Active Directory lab, then write rules controlling what can cross between the two. At the moment Metasploitable2 sits on the same flat LAN as everything else.
-- **Write my own firewall rules and check the logs.** Block something deliberately, then find it in the pfSense firewall logs.
-- **Fix DNS properly** in the pfSense DHCP settings instead of editing `/etc/resolv.conf`.
-- **Fix NTP on pfSense** so the lab VMs' clocks stop drifting.
+- Put the Active Directory lab on its own Internal Network behind a new pfSense interface (OPT1), with rules controlling what can cross between the two. At the moment Metasploitable2 sits on the same flat LAN as everything else.
+- Write my own firewall rules, block something on purpose, and find it in the pfSense firewall logs.
+- Hand out DNS through pfSense's DHCP settings instead of editing `/etc/resolv.conf` on each VM.
+- Fix NTP on pfSense so the lab VMs' clocks stop drifting.
 - Try Suricata or Snort on pfSense.

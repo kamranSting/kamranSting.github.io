@@ -2,7 +2,7 @@
 
 I'm Kamran, based in London, moving into cybersecurity with a focus on SOC and blue team work.
 
-My background is in regulated environments: compliance and AML risk work, immigration and legal administration in an OISC-regulated practice, and ten years leading language schools with 30+ staff. That gave me habits that carry straight into security operations: working to procedure, documenting carefully, and spotting what doesn't fit.
+My background is in regulated environments: compliance and AML risk work, immigration and legal administration in an OISC-regulated practice, and ten years leading language schools with 30+ staff. All of that meant working to procedure, keeping careful records and noticing when something didn't add up, which is a lot of what SOC work involves.
 
 ## Certifications
 
