@@ -1,0 +1,48 @@
+site_name: Kamran Pourhemmati | Blue Team Portfolio
+site_url: https://kamransting.github.io/
+site_author: Kamran Aliakbar Pourhemmati
+site_description: Home lab write-ups, detection notes and study logs on the path to a SOC analyst role.
+repo_url: https://github.com/kamranSting/kamranSting.github.io
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: cyan
+      toggle: {icon: material/weather-sunny, name: Light mode}
+    - scheme: default
+      primary: indigo
+      accent: cyan
+      toggle: {icon: material/weather-night, name: Dark mode}
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+  icon:
+    logo: material/shield-search
+
+nav:
+  - Home: index.md
+  - Home Lab:
+      - Overview: lab/index.md
+      - pfSense network segmentation: lab/pfsense-segmentation.md
+  - Notes:
+      - Security+ SY0-701: notes/security-plus.md
+      - TryHackMe log: notes/tryhackme.md
+  - About: about.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.tasklist: {custom_checkbox: true}
+  - tables
+  - attr_list
+  - md_in_html
+
+plugins:
+  - search
