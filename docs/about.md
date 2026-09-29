@@ -12,4 +12,4 @@ My background is in regulated environments: compliance and AML risk work, immigr
 ## Contact
 
 - GitHub: [kamranSting](https://github.com/kamranSting)
-- LinkedIn: add link
+- LinkedIn: [kamran-pourhemati](https://www.linkedin.com/in/kamran-pourhemati-004695276/)
