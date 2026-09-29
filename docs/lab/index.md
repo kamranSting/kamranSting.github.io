@@ -2,7 +2,7 @@
 
 ## Topology
 
-All lab VMs share one VirtualBox Internal Network behind pfSense, isolated from my home network.
+All the lab VMs share one VirtualBox Internal Network behind pfSense, separate from my home network.
 
 | Component | Role | Status |
 |---|---|---|
@@ -21,4 +21,4 @@ I picked Splunk over Security Onion because Security Onion needs about 16 GB of 
 
 ## Write-ups
 
-- [pfSense lab network: isolation and a DNS fault](pfsense-lab-network.md)
+- [Building an isolated home lab with pfSense and Kali](pfsense-lab-network.md)
