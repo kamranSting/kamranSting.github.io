@@ -12,6 +12,6 @@ Exam booked: October 2026
 
 ## Linked lab work
 
-Where a concept is backed by something I built, it links here.
+When I have built something that shows a concept, I link to it here.
 
 - Network isolation and DNS troubleshooting (Domains 3 and 4): [pfSense lab network](../lab/pfsense-lab-network.md)

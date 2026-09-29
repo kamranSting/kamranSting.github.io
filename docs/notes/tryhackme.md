@@ -12,4 +12,4 @@
 | | | |
 
 !!! note
-    No flags or answers here, just what I learned. Posting answers breaks TryHackMe's rules for most rooms.
+    I don't post flags or answers here, only what I learned. Posting answers breaks TryHackMe's rules for most rooms.
