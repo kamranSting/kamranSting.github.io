@@ -2,19 +2,23 @@
 
 ## Topology
 
+All lab VMs share one VirtualBox Internal Network behind pfSense, isolated from my home network.
+
 | Component | Role | Status |
 |---|---|---|
 | VirtualBox | Hypervisor | Running |
-| pfSense | Firewall / router between lab segments | Running |
+| pfSense CE | Firewall, router and DHCP for the lab LAN | Running |
 | Kali Linux | Attacker box for generating test activity | Running |
-| Windows Server (AD DS) | Domain controller | Planned |
-| Windows client + Sysmon | Endpoint telemetry | Planned |
-| CrowdSec | Behaviour-based blocking | Planned |
-| Security Onion | NSM / SIEM | Planned |
+| Metasploitable2 | Deliberately vulnerable target | Running |
+| Windows 11 + Sysmon | Endpoint telemetry | Running |
+| Ubuntu + Splunk | SIEM | Running |
+| Windows Server (AD DS) | Domain controller on its own segment | Planned |
+
+I picked Splunk over Security Onion because Security Onion needs about 16 GB of RAM, which doesn't fit in 32 GB alongside an AD lab.
 
 !!! warning "Publishing rule"
     Write-ups never include real public IPs, passwords, API keys or anything from outside the lab.
 
 ## Write-ups
 
-- [pfSense network segmentation](pfsense-segmentation.md)
+- [pfSense lab network: isolation and a DNS fault](pfsense-lab-network.md)

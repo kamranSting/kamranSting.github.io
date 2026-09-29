@@ -28,7 +28,7 @@ nav:
   - Home: index.md
   - Home Lab:
       - Overview: lab/index.md
-      - pfSense network segmentation: lab/pfsense-segmentation.md
+      - pfSense lab network: lab/pfsense-lab-network.md
   - Notes:
       - Security+ SY0-701: notes/security-plus.md
       - TryHackMe log: notes/tryhackme.md

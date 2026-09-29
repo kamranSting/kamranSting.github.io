@@ -5,7 +5,7 @@ Hands-on write-ups from my home lab and study notes on the way to a **SOC analys
 <div class="grid cards" markdown>
 
 - **Home Lab**  
-  pfSense, Kali, and (in progress) Active Directory, Sysmon, CrowdSec and Security Onion.  
+  pfSense, Kali, Metasploitable2, Sysmon and Splunk, with Active Directory next.  
   [:octicons-arrow-right-24: Lab write-ups](lab/index.md)
 
 - **Security+ SY0-701**  
@@ -20,8 +20,9 @@ Hands-on write-ups from my home lab and study notes on the way to a **SOC analys
 
 ## Currently working on
 
-- [x] pfSense firewall with segmented lab network
-- [ ] Windows Server AD domain with a joined client
-- [ ] Sysmon on endpoints, logs shipped to a SIEM
-- [ ] Security Onion sensor on the lab network
+- [x] pfSense firewall isolating the lab from my home network
+- [x] Sysmon on a Windows 11 endpoint
+- [x] Splunk SIEM
+- [ ] Windows Server AD domain on its own pfSense segment
+- [ ] Custom pfSense firewall rules and log review
 - [ ] CompTIA Security+ (exam booked October 2026)

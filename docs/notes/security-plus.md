@@ -14,4 +14,4 @@ Exam booked: October 2026
 
 Where a concept is backed by something I built, it links here.
 
-- Network segmentation (Domain 3): [pfSense write-up](../lab/pfsense-segmentation.md)
+- Network isolation and DNS troubleshooting (Domains 3 and 4): [pfSense lab network](../lab/pfsense-lab-network.md)
