@@ -13,4 +13,4 @@ Open http://127.0.0.1:8000
 5. Site is live at https://kamranSting.github.io
 
 ## New write-up
-Copy docs/lab/pfsense-segmentation.md, fill it in, add it to `nav` in mkdocs.yml.
+Copy docs/lab/pfsense-lab-network.md, fill it in, add it to `nav` in mkdocs.yml.
