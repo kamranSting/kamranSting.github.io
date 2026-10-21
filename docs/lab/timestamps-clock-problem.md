@@ -75,7 +75,7 @@ I measured before changing anything.
 - Splunk VM `timedatectl timesync-status`: offset +547 ms, jitter 478.5 ms, frequency +500 ppm.
 
 ![pfSense ntpq -p output showing upstream NTP servers and offsets](img/fig6-19oct-pfsense-ntpq.png){ loading=lazy }
-*Figure 6. 19 October: pfSense's upstream time servers and their offsets.*
+*Figure 6. 19 October: pfSense's upstream time servers and their offsets. I masked the refid column and the two servers listed by IP address.*
 
 ![Windows 11 w32tm output next to a Splunk search of event time against received time](img/fig7-19oct-win11-sync-and-lag-search.png){ loading=lazy }
 *Figure 7. 19 October: Win11 sync status and stripchart beside the early lag search.*
@@ -148,4 +148,4 @@ The maximums are still tens of seconds. I opened the biggest ones. The largest S
 - A clean cause for one symptom (big lag from the forwarder's startup) does not explain another (the stalls).
 - Do not call something fixed until it has been checked again.
 
-The screenshots above are cropped from my own lab consoles. Private lab addresses only; nothing here shows a public IP or a credential.
+The screenshots above are cropped from my own lab consoles. Only private lab addresses appear; I masked the public IPs of upstream time servers in Figure 6.
