@@ -22,3 +22,4 @@ I picked Splunk over Security Onion because Security Onion needs about 16 GB of 
 ## Write-ups
 
 - [Building an isolated home lab with pfSense and Kali](pfsense-lab-network.md)
+- [Can I trust the timestamps in my lab SIEM?](timestamps-clock-problem.md)

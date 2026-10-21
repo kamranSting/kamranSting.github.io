@@ -29,6 +29,7 @@ nav:
   - Home Lab:
       - Overview: lab/index.md
       - pfSense lab network: lab/pfsense-lab-network.md
+      - "Can I trust my SIEM timestamps?": lab/timestamps-clock-problem.md
   - Notes:
       - Security+ SY0-701: notes/security-plus.md
       - TryHackMe log: notes/tryhackme.md
