@@ -7,9 +7,9 @@ My background is in regulated environments: compliance and AML risk work, immigr
 ## Certifications
 
 - Microsoft Azure Fundamentals (AZ-900)
-- CompTIA Security+ (in progress)
+- CompTIA Security+ (SY0-701)
 
 ## Contact
 
 - GitHub: [kamranSting](https://github.com/kamranSting)
-- LinkedIn: [kamran-pourhemati](https://www.linkedin.com/in/kamran-pourhemati-004695276/)
+- LinkedIn: [Kamran Pourhemmati](https://www.linkedin.com/in/kamran-pourhemati-004695276/)

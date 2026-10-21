@@ -6,13 +6,11 @@
 
 This is the first stage of my home lab: a pfSense firewall in front of an internal VirtualBox network, with Kali as the first machine on it. I built it on my Windows PC while studying for CompTIA A+, Network+ and Security+ and working through TryHackMe.
 
-I've tried to write it up the way I'd explain it in an interview. Where I relied on pfSense's defaults or haven't built something yet, I say so.
+Where I relied on pfSense's defaults or haven't built something yet, I say so.
 
 ## Scope
 
-The lab is one LAN segment behind pfSense. pfSense handles routing and DHCP for it, and I manage it over HTTPS. Kali is on the network and can reach the internet. The design is about isolation, keeping lab traffic away from my real home network. It isn't a multi-segment network.
-
-There's one WAN and one LAN. I haven't written any firewall rules of my own, there's no second subnet or DMZ, and I haven't tested traffic between segments or reviewed the firewall logs. Those are all in [Next steps](#next-steps).
+The lab is one LAN segment behind pfSense. pfSense handles routing and DHCP for it, and I manage it over HTTPS. Kali is on the network and can reach the internet. The point is isolation, keeping lab traffic away from my home network, so there is one WAN and one LAN and no second segment. What I haven't done is listed under [Limitations](#limitations) and [Next steps](#next-steps).
 
 ## Goal
 
@@ -74,11 +72,9 @@ I'm running pfSense's default rules. I didn't write them, but I can explain them
 - On LAN, the default "allow LAN to any" rule lets the lab make outbound connections.
 - On WAN, all unsolicited inbound traffic is blocked, along with private and bogon source addresses. Nothing from the WAN side reaches the lab unless a rule allows it.
 
-The WAN side is implicit deny in practice: anything not explicitly allowed gets dropped. I haven't written per-interface rules or looked through the firewall logs yet, so I'm not claiming least-privilege rule design or log analysis here. Writing rules and then reading the logs is first on my list.
+Anything the WAN side doesn't explicitly allow is dropped (implicit deny). I haven't written rules of my own or read the firewall logs yet. That is first on my list.
 
 ## DNS troubleshooting
-
-This was the part of the build I learned the most from, mostly because of how I narrowed it down.
 
 Once Kali had a DHCP lease from pfSense, `ping google.com` failed:
 
@@ -102,25 +98,23 @@ $ echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
 $ ping google.com    # resolves now, ~20 ms replies, 0% loss
 ```
 
-I noted at the time that this is a workaround. `/etc/resolv.conf` is often managed automatically and can be overwritten by the next DHCP lease or a reboot. The lasting fix is to make sure pfSense includes a DNS server in its DHCP offer (Services > DHCP Server) so no one has to patch the file on each client.
+This is a workaround. `/etc/resolv.conf` is often managed automatically and can be overwritten by the next DHCP lease or a reboot. The lasting fix is to make sure pfSense includes a DNS server in its DHCP offer (Services > DHCP Server) so no one has to patch the file on each client.
 
-What I'll reuse is the method. Test one layer at a time: if the IP works and the name doesn't, it's DNS, and there's no need to start pulling apart the firewall.
+The method is to test one layer at a time. If the IP works and the name doesn't, it's DNS, and there's no need to start pulling apart the firewall.
 
 ## Other problems
 
-- **Boot loop after install.** The VM kept rebooting into the installer because the ISO was still attached and booted before the disk. I powered off, removed the ISO under Settings > Storage, and it booted the installed system. I now check this after every VM install.
-- **No `dhclient` on Kali.** `sudo dhclient eth0` gave "command not found" on this image. `sudo dhcpcd eth0` worked and pulled the lease (`offered 192.168.1.101 from 192.168.1.1`, default route via `192.168.1.1`), which also confirmed pfSense was acting as DHCP server and gateway.
-- **Kali's `.vbox` file didn't show in Import Appliance.** The importer only lists `.ova` and `.ovf` files. Double-clicking the `.vbox` file opened it, and switching the file filter to "All files" would have worked too.
-- **VirtualBox didn't recognise pfSense.** I set the guest type to FreeBSD (64-bit) myself.
+- Boot loop after install. The VM kept rebooting into the installer because the ISO was still attached and booted before the disk. I powered off, removed the ISO under Settings > Storage, and it booted the installed system. I now check this after every VM install.
+- No `dhclient` on Kali. `sudo dhclient eth0` gave "command not found" on this image. `sudo dhcpcd eth0` worked and pulled the lease (`offered 192.168.1.101 from 192.168.1.1`, default route via `192.168.1.1`), which also confirmed pfSense was acting as DHCP server and gateway.
+- Kali's `.vbox` file didn't show in Import Appliance. The importer only lists `.ova` and `.ovf` files. Double-clicking the `.vbox` file opened it, and switching the file filter to "All files" would have worked too.
+- VirtualBox didn't recognise pfSense. I set the guest type to FreeBSD (64-bit) myself.
 
 ## What I learned, and the Security+ links
 
-- **Isolation.** The Internal Network has no direct path to my home LAN, and the only way out is through pfSense. It's a small, concrete case of separating networks by trust level, although the lab is one flat segment inside.
-- **Implicit deny.** pfSense's WAN side drops any inbound traffic that no rule allows.
-- **DHCP, DNS and the default gateway.** I watched pfSense lease an address and set the default route, and I separated a DNS fault from a routing fault.
-- **Secure defaults.** I kept HTTPS on the management interface.
-
-I haven't claimed least privilege or logging, because I didn't configure either here. I'd rather defend a small claim than overstate a big one.
+- Isolation. The Internal Network has no direct path to my home LAN, and the only way out is through pfSense. It's a small case of separating networks by trust level, although the lab is one flat segment inside.
+- Implicit deny. pfSense's WAN side drops any inbound traffic that no rule allows.
+- DHCP, DNS and the default gateway. I watched pfSense lease an address and set the default route, and I separated a DNS fault from a routing fault.
+- Secure defaults. I kept HTTPS on the management interface.
 
 ## Limitations
 

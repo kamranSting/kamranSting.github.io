@@ -25,4 +25,4 @@ Hands-on write-ups from my home lab and study notes while I work towards a SOC a
 - [x] Splunk SIEM
 - [ ] Windows Server AD domain on its own pfSense segment
 - [ ] Custom pfSense firewall rules and log review
-- [ ] CompTIA Security+ (exam booked October 2026)
+- [x] CompTIA Security+ SY0-701 (passed)
