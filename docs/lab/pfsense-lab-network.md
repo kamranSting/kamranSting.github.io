@@ -122,7 +122,7 @@ The method is to test one layer at a time. If the IP works and the name doesn't,
 - Default firewall rules only.
 - Lab VMs can probably reach my home network through the default LAN rule.
 - No testing between segments and no firewall log review yet.
-- No NTP in the lab, so clocks drift across VMs, which caused problems in later stages.
+- No NTP at first, so clocks drifted across VMs. I fixed this later by making pfSense the lab's time source: see [Can I trust the timestamps in my lab SIEM?](timestamps-clock-problem.md).
 
 ## Next steps
 
@@ -131,7 +131,7 @@ The method is to test one layer at a time. If the IP works and the name doesn't,
 - Write explicit LAN and OPT1 rules, then check the firewall logs to see what they block.
 - Hand out DNS through pfSense's DHCP settings instead of editing `/etc/resolv.conf`.
 - Try Suricata or Snort on pfSense.
-- Point every VM at pfSense for time to stop the clock drift.
+- Done in October 2026: every VM now takes its time from pfSense (see the [timestamps write-up](timestamps-clock-problem.md)).
 - Write up the later stages (Metasploitable2, the Windows 11 endpoint with Sysmon, and Splunk) as separate pages.
 
 ---
