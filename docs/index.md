@@ -13,7 +13,7 @@ Hands-on write-ups from my home lab and study notes while I work towards a SOC a
   [:octicons-arrow-right-24: Notes](notes/security-plus.md)
 
 - **TryHackMe**  
-  Pre Security to SOC Level 1.  
+  Pre Security done, Cyber Security 101 in progress, SOC Level 1 next.  
   [:octicons-arrow-right-24: Progress log](notes/tryhackme.md)
 
 </div>
@@ -23,6 +23,8 @@ Hands-on write-ups from my home lab and study notes while I work towards a SOC a
 - [x] pfSense firewall isolating the lab from my home network
 - [x] Sysmon on a Windows 11 endpoint
 - [x] Splunk SIEM
+- [x] First write-up published: [can I trust the timestamps in my lab SIEM?](lab/timestamps-clock-problem.md)
+- [ ] Detecting SMB password guessing in Splunk
 - [ ] Windows Server AD domain on its own pfSense segment
 - [ ] Custom pfSense firewall rules and log review
 - [x] CompTIA Security+ SY0-701 (passed)
