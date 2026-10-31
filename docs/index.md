@@ -24,7 +24,8 @@ Hands-on write-ups from my home lab and study notes while I work towards a SOC a
 - [x] Sysmon on a Windows 11 endpoint
 - [x] Splunk SIEM
 - [x] First write-up published: [can I trust the timestamps in my lab SIEM?](lab/timestamps-clock-problem.md)
-- [ ] Detecting SMB password guessing in Splunk
+- [x] Detecting SMB password guessing in Splunk: [write-up](lab/smb-password-guessing.md), [detections](detections/index.md) and [ticket](tickets/hl-2026-1028-01.md)
+- [ ] Detecting password spraying
 - [ ] Windows Server AD domain on its own pfSense segment
 - [ ] Custom pfSense firewall rules and log review
 - [x] CompTIA Security+ SY0-701 (passed)

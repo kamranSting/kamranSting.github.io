@@ -16,3 +16,4 @@ Lab work that shows a concept is linked here.
 
 - Network isolation and DNS troubleshooting (Domains 3 and 4): [pfSense lab network](../lab/pfsense-lab-network.md)
 - Logging, time sync and checking evidence (Domain 4): [Can I trust the timestamps in my lab SIEM?](../lab/timestamps-clock-problem.md)
+- Password attacks, account lockout and alerting (Domains 2 and 4): [SMB password guessing: run it, find it, detect it](../lab/smb-password-guessing.md)
