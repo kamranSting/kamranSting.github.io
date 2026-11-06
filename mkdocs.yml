@@ -31,9 +31,11 @@ nav:
       - pfSense lab network: lab/pfsense-lab-network.md
       - "Can I trust my SIEM timestamps?": lab/timestamps-clock-problem.md
       - "SMB password guessing: run it, find it, detect it": lab/smb-password-guessing.md
+      - "Hunting in BOTS v1: from a scanner to a second source": lab/agentphp-second-ip.md
   - SOC work:
       - Detections: detections/index.md
       - "Ticket HL-2026-1028-01": tickets/hl-2026-1028-01.md
+      - "Ticket HL-2026-1106-01": tickets/hl-2026-1106-01.md
   - Notes:
       - Security+ SY0-701: notes/security-plus.md
       - TryHackMe log: notes/tryhackme.md
