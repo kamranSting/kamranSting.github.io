@@ -131,6 +131,10 @@ I added a third VirtualBox adapter on a new internal network, `adnet`, assigned 
 
 Two things decided where the block went. Rules are checked on the interface where traffic comes in, so a block on traffic from Kali belongs on the LAN tab. And the first rule that matches wins, so the block has to sit above "Default allow LAN to any", or it never runs. Everything else arriving on OPT1 hits pfSense's hidden default deny rule.
 
+![pfSense Firewall Rules, LAN tab: Anti-Lockout Rule, then my block rule from LAN subnets to OPT1 subnets with the log icon, then Default allow LAN to any](img/pfsense-fig1-12nov-lan-block-rule.png){ loading=lazy }
+
+*Figure 1. The LAN tab just after I applied the rule. The block sits second, above "Default allow LAN to any", and the list icon under the red cross shows it is logged.*
+
 ### How I proved it
 
 | Proof | Test | Result |
@@ -140,6 +144,22 @@ Two things decided where the block went. Rules are checked on the interface wher
 | The new network works | The server pinged 192.168.10.1 after I moved it to `adnet` and fixed its address | 4 of 4 replies |
 
 The third test is the control for the first. A silent ping on its own could mean the rule works, or that the network is dead. Because the server on `adnet` can reach pfSense, the silence from Kali comes from the rule.
+
+![Kali terminal: ping -c 3 192.168.10.1 gets 3 replies, 0% packet loss](img/pfsense-fig2-12nov-kali-ping-before.png){ loading=lazy }
+
+*Figure 2. Before the rule, at 13:37. Kali reaches the AD network, because "allow LAN to any" lets it through.*
+
+![Kali terminal: the same ping gets 0 replies, 100% packet loss](img/pfsense-fig3-12nov-kali-ping-after.png){ loading=lazy }
+
+*Figure 3. The same ping after the rule, at 15:08. No reply lines at all, just a timeout. Block drops the packet and says nothing.*
+
+![pfSense firewall log: three block lines at 15:08:06, 07 and 08, interface LAN, rule Block LAN to AD by default, 192.168.1.100 to 192.168.10.1, ICMP](img/pfsense-fig4-12nov-firewall-log-blocks.png){ loading=lazy }
+
+*Figure 4. The firewall log, one line for each of the three pings, each naming my rule. I cropped out the older lines above, because they show public addresses.*
+
+![Windows Server command prompt: first ping shows Destination host unreachable from 192.168.1.10 but 0% loss, second ping after the address change gets 4 replies from 192.168.10.1](img/pfsense-fig5-12nov-server-ping-control.png){ loading=lazy }
+
+*Figure 5. The control test on the server. The first ping failed from its old address, and Windows still reported 0% loss. After I set 192.168.10.10, it got 4 of 4 replies.*
 
 ### What I learned
 
