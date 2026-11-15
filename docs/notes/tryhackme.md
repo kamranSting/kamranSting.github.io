@@ -3,7 +3,7 @@
 | Path | Status |
 |---|---|
 | Pre Security | Completed, July 2026 (certificate) |
-| Cyber Security 101 | In progress (next room: Metasploit: Exploitation) |
+| Cyber Security 101 | In progress |
 | SOC Level 1 | Next, after Cyber Security 101 |
 
 ## Rooms

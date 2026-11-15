@@ -2,7 +2,7 @@
 
 ## Topology
 
-All the lab VMs share one VirtualBox Internal Network behind pfSense, separate from my home network.
+The lab VMs share one VirtualBox Internal Network behind pfSense, separate from my home network. A second internal network for Active Directory has its own pfSense interface. Since 12 November my own firewall rules block the lab LAN from it, and every block is logged. Details are in the [November update](pfsense-lab-network.md#update-november-2026-a-second-segment-and-my-own-rules).
 
 | Component | Role | Status |
 |---|---|---|
@@ -12,7 +12,7 @@ All the lab VMs share one VirtualBox Internal Network behind pfSense, separate f
 | Metasploitable2 | Deliberately vulnerable target | Running |
 | Windows 11 + Sysmon | Endpoint telemetry | Running |
 | Ubuntu + Splunk | SIEM | Running |
-| Windows Server (AD DS) | Domain controller on its own segment | Planned |
+| Windows Server 2022 | Will be the domain controller, on its own segment | Installed, not yet a domain controller |
 
 I picked Splunk over Security Onion because Security Onion needs about 16 GB of RAM, which doesn't fit in 32 GB alongside an AD lab.
 
