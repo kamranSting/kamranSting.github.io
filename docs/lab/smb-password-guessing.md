@@ -77,7 +77,7 @@ index=main EventCode=4740
 ![Splunk alert pages for Brute force detection and Account Lockout (4740), both enabled and scheduled](img/smb-fig4-28oct-saved-alerts.png){ loading=lazy }
 *Figure 5. 28 October: both alerts saved and enabled in Splunk. The "Send email" action shown on the first one was removed later the same day; both now only add to Triggered Alerts.*
 
-Both alerts run every five minutes over the last 15 minutes. I checked the search logic against the events from this exercise, but I haven't yet watched either alert fire on its own. That test is next. More detail on each rule is on the [Detections](../detections/index.md) page, and the same incident written up as a ticket is [HL-2026-1028-01](../tickets/hl-2026-1028-01.md).
+Both alerts run every five minutes over the last 15 minutes. I checked the search logic against the events from this exercise, and on 2 November I re-ran the attack and watched both alerts fire in Triggered Alerts. Each one fired three times for a single attack, so I added a throttle and re-tested it on 6 November. More detail on each rule is on the [Detections](../detections/index.md) page, and the same incident written up as a ticket is [HL-2026-1028-01](../tickets/hl-2026-1028-01.md).
 
 ## What this misses
 

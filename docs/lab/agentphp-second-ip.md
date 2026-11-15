@@ -1,8 +1,13 @@
 # Hunting in BOTS v1: from a scanner to a quieter second source
 
 **Period covered:** 3 and 5 November 2026
+
 **Dataset:** Splunk "Boss of the SOC" v1 (BOTS v1), `stream:http` sourcetype
+
 **Tools:** Splunk Enterprise 10.4.1
+
+**Times:** as Splunk shows them, which is UK summer time (BST, one hour ahead of GMT) for August 2016.
+
 **Status:** two sources investigated. What the second source's `agent.php` traffic really is stays unproven (see [What I could not prove](#what-i-could-not-prove)).
 
 This is practice on a public training dataset, not a real incident. The page is about the method I used, so it does not give the answers to the dataset's questions. I have also left out every public IP address, because I do not publish them, even from a training set. In the searches they appear as `<scanner>` and `<second_source>`.
@@ -22,7 +27,7 @@ This is the order I actually followed, taken from my lab log.
 9. Check outside sources. I searched for the file name to see if it belongs in a normal install.
 10. Separate what is proven from what is only supported or unproven.
 
-I have not built a proper timeline yet. I only read times off tables, and that is the first job for next time.
+When I first wrote this I had not built a proper timeline. I only read times off tables. I built one on 10 November: see the [update](#update-10-november-the-timeline) near the end.
 
 ## Part 1: finding the scanner (3 November)
 
@@ -160,12 +165,23 @@ The evidence backs these, but they are conclusions, not facts.
 
 The timing suggests a story. The password guessing was running until at least 22:46, and agent.php traffic starts at 22:55. One possibility is that the attacker guessed the admin password, used the admin panel to plant agent.php, then started using it. To prove it I would need a successful login and a file upload or edit before 22:55.
 
+## Update, 10 November: the timeline
+
+I built the timeline with `stats earliest(_time) as first latest(_time) as last count by uri_path src_ip`. This time I filtered on the two pages and not on one source address. A filter on one address would have hidden anyone else touching the same pages.
+
+- The password guessing on the admin page ran from 22:45:09 to 22:46:53.
+- The first `agent.php` request came at 22:55:22, about eight and a half minutes after the guessing stopped. The last one was at 23:21:34.
+- Only the second source ever requested `agent.php` in this sourcetype.
+- The scanner also requested the admin page, 33 times between 22:48 and 23:21. I have not looked at what it was doing there.
+
+So the guessing ended before `agent.php` appeared, and no other source used it in `stream:http`. The order fits the story above, but order is not proof. I still have not found a successful login or an upload.
+
 ## Next steps
 
-1. Build the timeline properly: first and last time for each page.
+1. Build the timeline properly: done on 10 November, see the update above.
 2. Read all 824 admin page replies for a successful login.
 3. Decode one short reply and see whether it is readable or still scrambled.
-4. Check whether any other source ever requested `agent.php`.
+4. Check whether any other source ever requested `agent.php`: none did in `stream:http`. Other sourcetypes are not checked yet.
 5. Look at the 3 events with no `src_ip` from Part 1.
 
 ## What I learned
