@@ -25,8 +25,10 @@ Hands-on write-ups from my home lab and study notes while I work towards a SOC a
 - [x] Splunk SIEM
 - [x] First write-up published: [can I trust the timestamps in my lab SIEM?](lab/timestamps-clock-problem.md)
 - [x] Detecting SMB password guessing in Splunk: [write-up](lab/smb-password-guessing.md), [detections](detections/index.md) and [ticket](tickets/hl-2026-1028-01.md)
-- [ ] Detecting password spraying
-- [ ] Windows Server AD domain on its own pfSense segment
+- [x] Password spraying run from Kali and caught by my alerts: [ticket](tickets/hl-2026-1106-01.md)
+- [ ] A dedicated password spraying rule
+- [x] Active Directory network on its own pfSense segment
+- [ ] Windows Server promoted to a domain controller
 - [x] Custom pfSense firewall rules and log review: [November update](lab/pfsense-lab-network.md#update-november-2026-a-second-segment-and-my-own-rules)
 - [x] Time for the Active Directory network from pfSense, proven three ways: [how I did it](lab/pfsense-lab-network.md#time-for-the-active-directory-network)
 - [x] CompTIA Security+ SY0-701 (passed)

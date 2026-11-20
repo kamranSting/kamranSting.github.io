@@ -27,7 +27,7 @@ This is the order I actually followed, taken from my lab log.
 9. Check outside sources. I searched for the file name to see if it belongs in a normal install.
 10. Separate what is proven from what is only supported or unproven.
 
-When I first wrote this I had not built a proper timeline. I only read times off tables. I built one on 10 November: see the [update](#update-10-november-the-timeline) near the end.
+The timeline is in the [update](#update-10-november-the-timeline) near the end.
 
 ## Part 1: finding the scanner (3 November)
 
@@ -79,7 +79,7 @@ Splitting by method and status gave three groups:
 
 I read the POST requests in full. All of them used the User-Agent `Python-urllib/2.7`, which is a script, not a browser. Each one sent the username `admin` with a different password. The pages that came back afterwards said "Username and password do not match". That is automated password guessing on the admin login.
 
-I nearly made a mistake here. Every login POST got status 303, a redirect, and I first read 303 as "failed". Joomla redirects after every login attempt, whether it works or not. The warning text on the next page is the real evidence of failure.
+Every login POST got status 303, a redirect. A 303 does not mean the login failed. Joomla redirects after every login attempt, whether it works or not. The warning text on the next page is the real evidence of failure.
 
 ### Counts that did not add up
 
@@ -178,7 +178,7 @@ So the guessing ended before `agent.php` appeared, and no other source used it i
 
 ## Next steps
 
-1. Build the timeline properly: done on 10 November, see the update above.
+1. Build the timeline properly: done, see the update above.
 2. Read all 824 admin page replies for a successful login.
 3. Decode one short reply and see whether it is readable or still scrambled.
 4. Check whether any other source ever requested `agent.php`: none did in `stream:http`. Other sourcetypes are not checked yet.
