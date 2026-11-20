@@ -9,7 +9,9 @@ Searches I have saved as alerts in my lab Splunk. For each one I write down what
 
 Both fired live for the first time on 2 November, when I re-ran the attack and watched them appear in Triggered Alerts.
 
-One thing needed fixing. Each alert fired three times for a single attack. The rule runs every 5 minutes but looks back over the last 15, so the same failed logins were counted in three overlapping runs, and each run crossed the threshold. The logic was right. The schedule was double-counting. I added a 15 minute throttle, so once an alert fires it stays quiet for 15 minutes instead of re-firing on events it has already reported. I re-tested on 6 November and got one entry per rule.
+One thing needed fixing. Each alert fired three times for a single attack. The rule runs every 5 minutes but looks back over the last 15. So three overlapping runs counted the same failed logins, and each run crossed the threshold. The logic was right. The schedule was double-counting.
+
+I added a 15 minute throttle, so once an alert fires it stays quiet for 15 minutes instead of re-firing on events it has already reported. I re-tested on 6 November and got one entry per rule.
 
 ![Splunk Triggered Alerts: two rows at 09:45, Brute force detection and Account Lockout (4740), one each](img/spray-fig1-6nov-triggered-alerts.png){ loading=lazy }
 *Figure 1. 6 November: one spray, one Triggered Alerts entry per rule.*

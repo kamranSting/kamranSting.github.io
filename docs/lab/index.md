@@ -12,7 +12,7 @@ The lab VMs share one VirtualBox Internal Network behind pfSense, separate from 
 | Metasploitable2 | Deliberately vulnerable target | Running |
 | Windows 11 + Sysmon | Endpoint telemetry | Running |
 | Ubuntu + Splunk | SIEM | Running |
-| Windows Server 2022 | Will be the domain controller, on its own segment | Installed, not yet a domain controller |
+| Windows Server 2022 | Will be the domain controller, on its own segment | Installed, takes its time from pfSense, not yet a domain controller |
 
 I picked Splunk over Security Onion because Security Onion needs about 16 GB of RAM, which doesn't fit in 32 GB alongside an AD lab.
 

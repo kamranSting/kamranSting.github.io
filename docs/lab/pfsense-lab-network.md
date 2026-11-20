@@ -14,11 +14,11 @@ The lab is one LAN segment behind pfSense. pfSense handles routing and DHCP for 
 
 ## Goal
 
-I wanted somewhere to practise attacking, and later defending: running scans, starting deliberately vulnerable machines and eventually monitoring the traffic, without any of it landing on my home network.
+I wanted somewhere to practise attacking, and later defending. That means running scans, starting deliberately vulnerable machines and eventually monitoring the traffic. None of it should land on my home network.
 
 The part of the design that does this is VirtualBox's Internal Network. An internal network is a virtual switch with no connection to the host's network card or my home LAN. The lab VMs can talk to each other and to pfSense, and the only way out is through pfSense's WAN interface.
 
-That boundary works in one direction for now. Nothing on my home network can start a connection into the lab, because pfSense's WAN side blocks unsolicited inbound traffic. Going the other way, the default LAN rule allows traffic to any destination, and VirtualBox NAT sits behind the WAN, so a lab VM could probably still reach devices on my home network. Blocking that is on the list below.
+That boundary works in one direction for now. Nothing on my home network can start a connection into the lab, because pfSense's WAN side blocks unsolicited inbound traffic. The other way is different. The default LAN rule allows traffic to any destination, and VirtualBox NAT sits behind the WAN. So a lab VM could probably still reach devices on my home network. Blocking that is on the list below.
 
 ## Architecture
 
@@ -161,7 +161,45 @@ The third test is the control for the first. A silent ping on its own could mean
 
 *Figure 5. The control test on the server. The first ping failed from its old address, and Windows still reported 0% loss. After I set 192.168.10.10, it got 4 of 4 replies.*
 
-### What I learned
+### Time for the Active Directory network
+
+A domain controller needs a clock it can trust. Kerberos, the login system in Active Directory, rejects logins by default when two clocks differ by more than 5 minutes. So before I promote the server, it takes its time from pfSense, the same source as the rest of the lab.
+
+Three separate things had to be true.
+
+| Part | What I did | When |
+|---|---|---|
+| The rule | Pass, UDP port 123 only, OPT1 subnets to the OPT1 address, logged | 16 November |
+| The service | pfSense's NTP service had no interface selected, so it listened on every interface, the WAN included. I set it to LAN and OPT1 only | 18 November |
+| The client | On the server: `w32tm /config /manualpeerlist:"192.168.10.1,0x8" /syncfromflags:manual /update` | 19 November |
+
+I chose LAN and OPT1 because that is where the clients are. The Splunk VM and the Windows 11 endpoint already ask pfSense on the LAN, so OPT1 alone would have cut them off. After the change I checked that the Splunk VM still took its time from 192.168.1.1.
+
+![pfSense Services, NTP, Settings: the changes have been applied, and LAN and OPT1 are selected in the Interface list](img/pfsense-fig6-18nov-ntp-interfaces.png){ loading=lazy }
+
+*Figure 6. 18 November: the NTP service set to LAN and OPT1 only.*
+
+The `0x8` tells Windows to ask in client mode. pfSense does not run Windows, and Microsoft's documentation says some time servers that don't run Windows answer only client mode requests.
+
+| Proof | Test | Result |
+|---|---|---|
+| The server names pfSense | `w32tm /query /status` on the server | Source 192.168.10.1, last sync at 20:18:40 |
+| The rule carried traffic | The States column of the NTP rule on the OPT1 tab | 0/0 B for three days, then 1/3 KiB |
+| The log names my rule | Status > System Logs > Firewall | 16 pass lines from 192.168.10.10 to 192.168.10.1 on UDP 123, about one every 64 seconds, each naming my rule |
+
+![Windows Server command prompt: w32tm /resync /rediscover completes, then w32tm /query /status shows source 192.168.10.1 and last successful sync at 20:18:40](img/pfsense-fig7-19nov-server-w32tm.png){ loading=lazy }
+
+*Figure 7. 19 November: the server names pfSense as its time source.*
+
+![pfSense Firewall Rules, OPT1 tab: the ICMP rule shows 0/0 B and the NTP rule shows 1/3 KiB](img/pfsense-fig8-19nov-opt1-ntp-rule-states.png){ loading=lazy }
+
+*Figure 8. The NTP rule on the OPT1 tab after the server started asking. The States column moved from 0/0 B to 1/3 KiB.*
+
+![pfSense firewall log: sixteen pass lines on OPT1 from 20:07:23 to 20:24:01, each naming the rule Allow adnet to pfSense NTP, from 192.168.10.10 port 123 to 192.168.10.1 port 123, UDP](img/pfsense-fig9-19nov-firewall-log-ntp-pass.png){ loading=lazy }
+
+*Figure 9. The firewall log: one pass line for each time request, each naming my rule.*
+
+### What the update taught me
 
 - A failed ping only means no reply came back. The message tells you where to look. "Destination host unreachable" from my own address meant the server still had its old IP. A timeout meant pfSense dropped the packet on purpose.
 - Windows counted those "Destination host unreachable" replies as received, 0% loss. Read the lines, not only the summary.
@@ -185,12 +223,19 @@ The third test is the control for the first. A silent ping on its own could mean
 
 ## Next steps
 
-- Done in November 2026: a second network behind a new pfSense interface (OPT1), a block rule from the LAN, a small pass rule, and the firewall log checked. See the update above.
-- Add allow rules for what the domain needs (DNS, Kerberos, LDAP, SMB, time from pfSense, logs to Splunk), each with a reason, then test TCP and UDP, not only ping.
+Done:
+
+- October 2026: every VM on the LAN takes its time from pfSense (see the [timestamps write-up](timestamps-clock-problem.md)).
+- November 2026: a second network behind a new pfSense interface (OPT1), a block rule from the LAN, a small pass rule, and the firewall log checked.
+- November 2026: time for the Active Directory network, with a rule, the NTP service on two interfaces only, and the server as a client. See the update above.
+
+To do:
+
+- Add allow rules for what the domain needs (DNS, Kerberos, LDAP, SMB, logs to Splunk), each with a reason. Then test TCP and UDP, not only ping.
+- Promote the server to a domain controller.
 - Add a LAN rule that blocks the lab from reaching my home network's address range, then confirm it from Kali.
 - Hand out DNS through pfSense's DHCP settings instead of editing `/etc/resolv.conf`.
 - Try Suricata or Snort on pfSense.
-- Done in October 2026: every VM now takes its time from pfSense (see the [timestamps write-up](timestamps-clock-problem.md)).
 - Write up the later stages (Metasploitable2, the Windows 11 endpoint with Sysmon, and Splunk) as separate pages.
 
 ---

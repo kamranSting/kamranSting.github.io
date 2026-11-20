@@ -13,7 +13,7 @@ Hands-on write-ups from my home lab and study notes while I work towards a SOC a
   [:octicons-arrow-right-24: Notes](notes/security-plus.md)
 
 - **TryHackMe**  
-  Pre Security done, Cyber Security 101 in progress, SOC Level 1 next.  
+  Pre Security done. Cyber Security 101 and SOC Level 1 in progress.  
   [:octicons-arrow-right-24: Progress log](notes/tryhackme.md)
 
 </div>
@@ -28,4 +28,5 @@ Hands-on write-ups from my home lab and study notes while I work towards a SOC a
 - [ ] Detecting password spraying
 - [ ] Windows Server AD domain on its own pfSense segment
 - [x] Custom pfSense firewall rules and log review: [November update](lab/pfsense-lab-network.md#update-november-2026-a-second-segment-and-my-own-rules)
+- [x] Time for the Active Directory network from pfSense, proven three ways: [how I did it](lab/pfsense-lab-network.md#time-for-the-active-directory-network)
 - [x] CompTIA Security+ SY0-701 (passed)

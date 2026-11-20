@@ -92,9 +92,9 @@ So I paged through a table of the POSTs instead, and found the extra one on page
 ![Splunk table of POSTs, page 8: one row at 22:45:21.325 has an empty status column](img/agent-fig5-5nov-missing-status.png){ loading=lazy }
 *Figure 4. The one POST with no status.*
 
-Its fields showed the request was captured but the reply was not (`data_packets_out` 0, `missing_packets_out` 1). It was a gap in the capture, so 411 plus 1 is 412.
+Its fields showed that the capture had the request but not the reply (`data_packets_out` 0, `missing_packets_out` 1). It was a gap in the capture, so 411 plus 1 is 412.
 
-I found the missing agent.php request the same way, at 22:56:18. Again no reply was captured, so 193 plus 1 is 194.
+I found the missing agent.php request the same way, at 22:56:18. Again the capture had no reply, so 193 plus 1 is 194.
 
 ### How the gap led to the User-Agents
 
@@ -104,7 +104,7 @@ That missing agent.php request claimed to be `Opera 9.52` on Windows. Earlier I 
 src_ip=<second_source> | stats count by uri_path http_user_agent
 ```
 
-![Splunk stats by uri_path and http_user_agent: the admin page has one row, Python-urllib/2.7, 1236; agent.php has many browser User-Agents, mostly count 1](img/agent-fig2-5nov-useragent-split.png){ loading=lazy }
+![Splunk stats by uri_path and http_user_agent: the admin page has one row, Python-urllib/2.7, 1236. agent.php has many browser User-Agents, mostly count 1](img/agent-fig2-5nov-useragent-split.png){ loading=lazy }
 *Figure 5. The admin page only ever saw one User-Agent. agent.php saw a different one almost every time.*
 
 The admin page had one row: Python, 1,236. Taking that away from the 1,430 total leaves 194, which is every agent.php request. Those 194 used 182 different browser strings: Chrome, Firefox, Safari, Opera and Internet Explorer, on Windows, Linux, Mac, iPhone and iPad. Most appeared once.
@@ -126,7 +126,7 @@ A normal web page comes back as HTML. These replies were one made-up tag around 
 ![Splunk stats count by dest_content: every reply is a custom tag around base64-looking text](img/agent-fig4-5nov-replies.png){ loading=lazy }
 *Figure 7. The 17 different replies, all in the same made-up tag.*
 
-Only 51 of the 194 requests got any reply content in the capture. The same short reply came back 34 times, one came back twice, and 15 were each unique. The other 143 had no captured reply content. Reading the table, the requests came in quick bursts of about 4 to 9 inside a second or two, usually with one reply per burst. I saw that in the timestamps; I did not measure it with a search.
+Only 51 of the 194 requests got any reply content in the capture. The same short reply came back 34 times, one came back twice, and 15 were each unique. The other 143 had no captured reply content. Reading the table, the requests came in quick bursts of about 4 to 9 inside a second or two, usually with one reply per burst. I saw that in the timestamps. I did not measure it with a search.
 
 Last, I searched for the file name. As far as I could find, `agent.php` is not part of a standard Joomla install. I have not checked that against an official Joomla file list.
 
@@ -142,7 +142,7 @@ These come straight from searches and screenshots.
 - No browser User-Agent ever hit the admin page, and Python never hit agent.php.
 - 143 of the 194 agent.php requests had no captured reply content. There were 17 different replies. The most common appeared 34 times.
 - Every agent.php reply with content (all 51) used the same made-up tag around base64-looking text.
-- Both off-by-one counts were capture gaps: the request was recorded and the reply was not.
+- Both off-by-one counts were capture gaps: the capture recorded the request and not the reply.
 - `!=` and `stats` both skip events where the field is missing.
 
 ### Supported, not proven
