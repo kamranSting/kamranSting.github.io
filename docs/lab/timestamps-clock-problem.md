@@ -47,7 +47,7 @@ On 16 October the Splunk VM's console printed kernel warnings: `rcu_preempt dete
 ![Splunk VM console showing rcu_preempt detected stalls and a timer handling warning](img/fig4-16oct-rcu-stalls.png){ loading=lazy }
 *Figure 4. 16 October: kernel warnings on the Splunk VM console.*
 
-Later that day I ran a lag check on my own lab data, the gap between when an event says it happened (`_time`) and when Splunk received it (`_indextime`):
+Later that day I ran a lag check on my own lab data. Lag is the gap between when an event says it happened (`_time`) and when Splunk received it (`_indextime`):
 
 ```
 index=main earliest=-15m
@@ -135,7 +135,7 @@ The maximums are still tens of seconds. I opened the biggest ones. The largest S
 
 ## Still open
 
-- **The Splunk VM still stalls.** On 19 October the kernel logged a 162-second soft lockup, and on 20 October I caught one live: a 23-second lockup on CPU#0 and another on CPU#3 while a Splunk process was running. After the stall the clock was off by about 2 ms, so the clock now survives it, but the stalls are unexplained. I suspect something on the host, and I have not shown it.
+- **The Splunk VM still stalls.** On 19 October the kernel logged a 162-second soft lockup. On 20 October I caught one live: a 23-second lockup on CPU#0 and another on CPU#3 while a Splunk process was running. After the stall the clock was off by about 2 ms, so the clock now survives it, but the stalls are unexplained. I suspect something on the host, and I have not shown it.
 - **Win11's Root Dispersion** was 7.78 s on 20 October and I have not rechecked it.
 - **Raw searches on the 8 GB VM** were still being cancelled on 13 October. I have no clean explanation yet.
 - My early 19 October times are approximate.
@@ -148,4 +148,4 @@ The maximums are still tens of seconds. I opened the biggest ones. The largest S
 - A clean cause for one symptom (big lag from the forwarder's startup) does not explain another (the stalls).
 - Do not call something fixed until it has been checked again.
 
-The screenshots above are cropped from my own lab consoles. Only private lab addresses appear; I masked the public IPs of upstream time servers in Figure 6.
+The screenshots above are cropped from my own lab consoles. Only private lab addresses appear. I masked the public IPs of upstream time servers in Figure 6.

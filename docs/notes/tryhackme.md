@@ -4,7 +4,7 @@
 |---|---|
 | Pre Security | Completed, July 2026 (certificate) |
 | Cyber Security 101 | In progress |
-| SOC Level 1 | Next, after Cyber Security 101 |
+| SOC Level 1 | In progress, started November 2026 |
 
 ## Rooms
 
