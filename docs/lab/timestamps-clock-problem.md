@@ -30,7 +30,7 @@ My first theory was that the search was filling the disk. I tested it by running
 
 The Job Inspector gave the real picture. For the bare search, most of the time went to reading raw events, and it had read about 70,000 of 33,413,777 events (roughly 0.2%) before it was cancelled. My reading is that "auto-cancel" here is an inactivity timeout and not a runtime limit: the search crawled until it stopped reporting progress. The VM had 4 GB of RAM, and Splunk's health panel showed Resource Usage red. A `tstats` count returned the full 33,413,777 in about a second, because it reads the index files and not the raw events.
 
-That evening I raised the VM to 8 GB and 4 vCPUs. `free -h` then showed 7.7 GiB and `nproc` showed 4.
+I raised the VM to 8 GB and 4 vCPUs. `free -h` then showed 7.7 GiB and `nproc` showed 4.
 
 ![Terminal output of free -h showing 7.7 GiB and nproc showing 4](img/fig2-12oct-8gb-4cpu.png){ loading=lazy }
 *Figure 2. 12 October: after the resize, free -h shows 7.7 GiB and nproc shows 4.*
@@ -47,7 +47,7 @@ On 16 October the Splunk VM's console printed kernel warnings: `rcu_preempt dete
 ![Splunk VM console showing rcu_preempt detected stalls and a timer handling warning](img/fig4-16oct-rcu-stalls.png){ loading=lazy }
 *Figure 4. 16 October: kernel warnings on the Splunk VM console.*
 
-Later that day I ran a lag check on my own lab data. Lag is the gap between when an event says it happened (`_time`) and when Splunk received it (`_indextime`):
+I then ran a lag check on my own lab data. Lag is the gap between when an event says it happened (`_time`) and when Splunk received it (`_indextime`):
 
 ```
 index=main earliest=-15m
@@ -59,8 +59,6 @@ Average lag was 254 s for Sysmon, 305 s for Security and 293 s for System, with 
 
 ![Splunk table of average and maximum lag per source, around 254 to 305 seconds](img/fig5-16oct-positive-lag.png){ loading=lazy }
 *Figure 5. 16 October: the positive lag, average 254 to 305 seconds per source.*
-
-I had met clock trouble before. In August, searches on "last 15 minutes" had missed events, and I had used "All time" as a workaround and noted that the lab had no shared clock. It was still unfixed in October.
 
 ## Why timestamps matter
 
@@ -83,12 +81,6 @@ I measured before changing anything.
 Then the lag, per event. I computed `lag=_indextime-_time` for each event and looked at the smallest value per source, not the largest. That was my second observation: every source showed a **negative** lag, roughly -34.6 s to +1.0 s. A negative lag means Splunk "received" an event before it says it happened, which cannot be true. It means the two clocks disagreed at that moment.
 
 So these are two separate observations. On 16 October the lag was **positive** and large, 250 to 400 seconds. On 19 October it was **negative** and small, in seconds. I do not know that they share one cause. I could only tie the 19 October one to the clocks, because that is when I measured them.
-
-### Wrong turns
-
-- **Maximums hid the problem.** My first lag search used `max(_time)` and `max(_indextime)` per source. The gaps looked like small lags of 0 to 34 s. Only the per-event version showed the negative values.
-- **A suggested install replaced my time service.** `ntpq` told me to `apt install ntpsec`. I did, and it replaced `systemd-timesyncd`. I reinstalled `systemd-timesyncd` to put it back.
-- **I blamed the freezing for the big lag numbers.** Later, drilling into the biggest values showed they were something else (below).
 
 ## The fix
 

@@ -147,11 +147,11 @@ The third test is the control for the first. A silent ping on its own could mean
 
 ![Kali terminal: ping -c 3 192.168.10.1 gets 3 replies, 0% packet loss](img/pfsense-fig2-12nov-kali-ping-before.png){ loading=lazy }
 
-*Figure 2. Before the rule, at 13:37. Kali reaches the AD network, because "allow LAN to any" lets it through.*
+*Figure 2. Before the rule. Kali reaches the AD network, because "allow LAN to any" lets it through.*
 
 ![Kali terminal: the same ping gets 0 replies, 100% packet loss](img/pfsense-fig3-12nov-kali-ping-after.png){ loading=lazy }
 
-*Figure 3. The same ping after the rule, at 15:08. No reply lines at all, just a timeout. Block drops the packet and says nothing.*
+*Figure 3. The same ping after the rule. No reply lines at all, just a timeout. Block drops the packet and says nothing.*
 
 ![pfSense firewall log: three block lines at 15:08:06, 07 and 08, interface LAN, rule Block LAN to AD by default, 192.168.1.100 to 192.168.10.1, ICMP](img/pfsense-fig4-12nov-firewall-log-blocks.png){ loading=lazy }
 
@@ -167,11 +167,11 @@ A domain controller needs a clock it can trust. Kerberos, the login system in Ac
 
 Three separate things had to be true.
 
-| Part | What I did | When |
-|---|---|---|
-| The rule | Pass, UDP port 123 only, OPT1 subnets to the OPT1 address, logged | 16 November |
-| The service | pfSense's NTP service had no interface selected, so it listened on every interface, the WAN included. I set it to LAN and OPT1 only | 18 November |
-| The client | On the server: `w32tm /config /manualpeerlist:"192.168.10.1,0x8" /syncfromflags:manual /update` | 19 November |
+| Part | What I did |
+|---|---|
+| The rule | Pass, UDP port 123 only, OPT1 subnets to the OPT1 address, logged |
+| The service | pfSense's NTP service had no interface selected, so it listened on every interface, the WAN included. I set it to LAN and OPT1 only |
+| The client | On the server: `w32tm /config /manualpeerlist:"192.168.10.1,0x8" /syncfromflags:manual /update` |
 
 I chose LAN and OPT1 because that is where the clients are. The Splunk VM and the Windows 11 endpoint already ask pfSense on the LAN, so OPT1 alone would have cut them off. After the change I checked that the Splunk VM still took its time from 192.168.1.1.
 
@@ -184,7 +184,7 @@ The `0x8` tells Windows to ask in client mode. pfSense does not run Windows, and
 | Proof | Test | Result |
 |---|---|---|
 | The server names pfSense | `w32tm /query /status` on the server | Source 192.168.10.1, last sync at 20:18:40 |
-| The rule carried traffic | The States column of the NTP rule on the OPT1 tab | 0/0 B for three days, then 1/3 KiB |
+| The rule carried traffic | The States column of the NTP rule on the OPT1 tab | 0/0 B before the server asked, then 1/3 KiB |
 | The log names my rule | Status > System Logs > Firewall | 16 pass lines from 192.168.10.10 to 192.168.10.1 on UDP 123, about one every 64 seconds, each naming my rule |
 
 ![Windows Server command prompt: w32tm /resync /rediscover completes, then w32tm /query /status shows source 192.168.10.1 and last successful sync at 20:18:40](img/pfsense-fig7-19nov-server-w32tm.png){ loading=lazy }

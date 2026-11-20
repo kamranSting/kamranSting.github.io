@@ -20,7 +20,7 @@ SMB is the Windows file and printer sharing protocol. Password guessing over SMB
 When someone guesses passwords against a local account, Windows should record each failed attempt as event 4625 (an account failed to log on). My lockout policy locks an account after 10 bad tries. So I expected a run of 4625 events and then a lockout.
 
 ![PowerShell net accounts output showing lockout threshold 10, duration 10 minutes and observation window 10 minutes](img/smb-fig0-27oct-lockout-policy.png){ loading=lazy }
-*Figure 1. 27 October: the lockout policy on the Windows VM, checked the day before the test. The weak password rules (minimum length 0, no history) are lab settings, not a recommendation.*
+*Figure 1. 27 October: the lockout policy on the Windows VM, checked before the test. The weak password rules (minimum length 0, no history) are lab settings, not a recommendation.*
 
 That is what I got. In Splunk:
 
@@ -49,7 +49,7 @@ I went through the events with the questions a ticket would ask.
 - Wrong password or wrong username? The 0xC000006A sub status says the username was valid, so whoever did this already knew a real account name.
 - At the keyboard or over the network? Logon Type 3 means another machine.
 - Did it work? Not in the attack run. The 10th failure locked the account first.
-- Did the attack tool tell the truth? No. It reported connection timeouts, but every attempt still showed up in Splunk. I trust the target's logs over the attacker's output now. I didn't expect to learn that one.
+- Did the attack tool tell the truth? No. It reported connection timeouts, but every attempt still showed up in Splunk. I trust the target's logs over the attacker's output now.
 
 ## The detection I built
 
@@ -75,7 +75,7 @@ index=main EventCode=4740
 ```
 
 ![Splunk alert pages for Brute force detection and Account Lockout (4740), both enabled and scheduled](img/smb-fig4-28oct-saved-alerts.png){ loading=lazy }
-*Figure 5. 28 October: both alerts saved and enabled in Splunk. The "Send email" action shown on the first one was removed later the same day. Both now only add to Triggered Alerts.*
+*Figure 5. 28 October: both alerts saved and enabled in Splunk. I removed the "Send email" action shown on the first one. Both now only add to Triggered Alerts.*
 
 Both alerts run every five minutes over the last 15 minutes. I checked the search logic against the events from this exercise, and on 2 November I re-ran the attack and watched both alerts fire in Triggered Alerts. Each one fired three times for a single attack, so I added a throttle and re-tested it on 6 November. More detail on each rule is on the [Detections](../detections/index.md) page, and the same incident written up as a ticket is [HL-2026-1028-01](../tickets/hl-2026-1028-01.md).
 
